@@ -17,6 +17,11 @@ app.use(cors(
     }
 ))
 
+// app.use((req, res, next) => {
+//     console.log(`${req.method} request for '${req.url}' - ${JSON.stringify(req.body)}`);
+//     next();
+// });
+
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/pickups', pickupRoutes);

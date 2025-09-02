@@ -19,6 +19,10 @@ const pickupSchema = new mongoose.Schema({
         enum: ['scheduled', 'completed', 'canceled'],
         default: 'scheduled'
     },
+    itemsList: {
+        type: String,
+        required: true
+    },
     location: {
         type: String // Store Google Maps URL
     },
