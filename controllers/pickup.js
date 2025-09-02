@@ -54,6 +54,7 @@ exports.createPickup = async (req, res) => {
           <p><strong>Location:</strong> <a href='${pickup.location}'>Google Maps</a></p>`
       };
 
+
       await transporter.sendMail(mailOptions);
     } catch (emailError) {
       // Log email error but don't block pickup creation
