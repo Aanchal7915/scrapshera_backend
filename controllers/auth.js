@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mailSender = require('../utils/mailSender');
 
-const verifyEmailTokenExpiry = 1000 * 60*60;
-const resetPassTokenExpiry = 1000 * 60 * 5;
+const verifyEmailTokenExpiry = 1000 *60*60;
+const resetPassTokenExpiry = 1000 *60*60;
 
 // Login controller
 exports.login = async (req, res) => {
