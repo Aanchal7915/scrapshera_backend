@@ -1,3 +1,5 @@
+
+const nodemailer = require('nodemailer');
 const Pickup = require('../models/pickup');
 
 // Create a new pickup
@@ -27,6 +29,37 @@ exports.createPickup = async (req, res) => {
     });
 
     await pickup.save();
+
+    // Send email to scrapshera01@gmail.com with pickup details
+    try {
+      // Configure transporter (using Gmail)
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'scrapshera01@gmail.com',
+          pass: process.env.GMAIL_APP_PASSWORD // Store app password in .env
+        }
+      });
+
+      // Email content
+      const mailOptions = {
+        from: 'scrapshera01@gmail.com',
+        to: 'scrapshera01@gmail.com',
+        subject: 'New Pickup Created',
+        html: `<h2>New Pickup Request</h2>
+          <p><strong>User ID:</strong> ${pickup.user}</p>
+          <p><strong>Address:</strong> ${pickup.address}</p>
+          <p><strong>Scheduled Date:</strong> ${pickup.scheduledDate}</p>
+          <p><strong>Items List:</strong> ${pickup.itemsList}</p>
+          <p><strong>Location:</strong> <a href='${pickup.location}'>Google Maps</a></p>`
+      };
+
+      await transporter.sendMail(mailOptions);
+    } catch (emailError) {
+      // Log email error but don't block pickup creation
+      console.error('Failed to send pickup email:', emailError);
+    }
+
     res.status(201).json(pickup);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
