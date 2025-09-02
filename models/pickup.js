@@ -18,6 +18,9 @@ const pickupSchema = new mongoose.Schema({
         type: String,
         enum: ['scheduled', 'completed', 'canceled'],
         default: 'scheduled'
-    }
+    },
+    location: {
+        type: String // Store Google Maps URL
+    },
 }, { timestamps: true });
 module.exports = mongoose.model('Pickup', pickupSchema);

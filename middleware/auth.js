@@ -5,7 +5,6 @@ const User = require('../models/user');
 // Middleware to verify JWT and attach user to request
 exports.authenticate = async (req, res, next) => {
 	const token = req.header('Authorization')?.replace('Bearer ', '');
-    console.log(token);
 	if (!token) {
 		return res.status(401).json({ message: 'No token, authorization denied' });
 	}
@@ -16,7 +15,6 @@ exports.authenticate = async (req, res, next) => {
 			return res.status(401).json({ message: 'User not found' });
 		}
 		next();
-        console.log(req.user);
 	} catch (err) {
         console.error(err);
 		res.status(401).json({ message: 'Token is not valid' });

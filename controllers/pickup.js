@@ -3,12 +3,29 @@ const Pickup = require('../models/pickup');
 // Create a new pickup
 exports.createPickup = async (req, res) => {
   try {
-    const { address, scheduledDate } = req.body;
+    const {
+      pickupLocation,
+      dateTime,
+      itemsList,
+      latitude,
+      longitude,
+    } = req.body;
+
+    // Build Google Maps location string if coordinates are present
+    let locationUrl = '';
+    if (latitude && longitude) {
+      locationUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    }
+
+
     const pickup = new Pickup({
       user: req.user._id,
-      address,
-      scheduledDate
+      address: pickupLocation,
+      scheduledDate: dateTime,
+      itemsList,
+      location: locationUrl, // Store Google Maps URL
     });
+
     await pickup.save();
     res.status(201).json(pickup);
   } catch (error) {
@@ -35,8 +52,7 @@ exports.getAllPickups = async (req, res) => {
       end.setHours(23,59,59,999);
       filter.scheduledDate = { $gte: start, $lte: end };
     }
-    console.log(filter)
-    let query = Pickup.find(filter).populate('user', 'name email');
+    let query = Pickup.find(filter).populate('user', 'name email phoneNu');
     if (email) {
       // Filter by user email using populate match
       query = query.populate({ path: 'user', match: { email } });
@@ -71,7 +87,6 @@ exports.getUserPickups = async (req, res) => {
       end.setHours(23,59,59,999);
       filter.scheduledDate = { $gte: start, $lte: end };
     }
-    console.log(filter)
     let query = Pickup.find(filter);
     query = query.sort({ scheduledDate: sort === 'asc' ? 1 : -1 });
     query = query.skip((page - 1) * limit).limit(Number(limit));
