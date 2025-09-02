@@ -17,7 +17,7 @@ exports.login = async (req, res) => {
 
 		const user = await User.findOne({ email });
 		if (!user) {
-			return res.status(400).json({ message: `User doesn'token! Please sign up first.` });
+			return res.status(400).json({ message: `User doesn't exist! Please sign up first.` });
 		}
 
 		if (user.isVerified === false) {
